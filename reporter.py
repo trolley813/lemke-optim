@@ -2,24 +2,20 @@ from tabulate import tabulate
 import numpy as np
 
 class Reporter:
-    @staticmethod
-    def print_numpy(lable, nums):
-        np.set_printoptions(formatter={'all': lambda x: "$%s$" % x}, linewidth=200)
-        print(lable + "\n%s\n" % nums)
+    def __init__(self, file_name = 'tex/_report.tex'):
+        self.file = open(file_name, 'w')
 
-    @staticmethod
-    def print_simplex_table(iter_no, simplex_table):
-        np.set_printoptions(formatter={'all': lambda x: "$%s$" % x}, linewidth=200)
-        print("simplex_table at iter %d = \n%s\n" % (iter_no, simplex_table))
+    def print_numpy(self, lable, nums):
+        self.file.write(lable + "\n\n" + tabulate(nums, tablefmt="latex", floatfmt=".2f") + "\n\n")
 
+    def print_simplex_table(self, iter_no, simplex_table):
+        self.file.write("\nsimplex table at iter " + str(iter_no) + " = \n\n" +  tabulate(simplex_table, tablefmt="latex", floatfmt=".2f") + "\n\n")
 
-    @staticmethod
-    def print_changes(base_from, base_to):
-        print("%s -> %s" % (base_from, base_to))
+    def print_changes(self, base_from, base_to):
+        self.file.write(str(base_from) + " -> " + str(base_to) + "\n\n")
 
-    @staticmethod
-    def print_results(pt, ss, scs, fs, ys):
-        print(pt)
-        print("s* =", ss, "s*' =", scs)
-        print("f* =", fs)
-        print("y* =", ys)
+    def print_results(self, pt, ss, scs, fs, ys):
+        self.file.write(str(pt))
+        self.file.write("s* = " + str(ss) + "\n\ns*' =" + str(scs) + "\n\n")
+        self.file.write("f* = " + str(fs) + "\n\n")
+        self.file.write("y* = " + str(ys) + "\n\n")

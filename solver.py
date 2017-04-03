@@ -76,7 +76,7 @@ class Solver:
             base_to = base_from + m if base_from < m else base_from - m
             ratios = [simplex_table[i, -1] / simplex_table[i, base_to]
                       if simplex_table[i, base_to] > 0 else 10000 for i in range(m)]
-            self.reporter.print_numpy("Ratios:", ratios)
+            # self.reporter.print_numpy("Ratios:", ratios)
             base_from_index = np.argmin(ratios)
             base_z0_index = np.where(base == 2 * m)[0][0]
             if ratios[base_z0_index] == ratios[base_from_index]:
