@@ -11,8 +11,8 @@ class Solver:
         self.reporter = reporter
 
     def zw(self, j):
-        return "w_%d" % (j + 1) if j < self.m else
-        ("z_%d" % (j + 1 - self.m) if j != 2 * self.m else "z_0")
+        return ("w_{%d}" % (j + 1) if j < self.m else
+                ("z_{%d}" % (j + 1 - self.m) if j != 2 * self.m else "z_0"))
 
     def solve(self):
         E = np.eye(4, dtype=Fraction) - \
@@ -52,7 +52,7 @@ class Solver:
         base_from_index = np.argmin(simplex_table[:, -1])
         base_from = base[base_from_index]
         base_to = 2 * m
-        self.reporter.print_numpy("Base is:", base_str)
+        self.reporter.print_base(base_str)
         self.reporter.print_changes(self.zw(base_from), self.zw(base_to))
         while 1:
             iter_no += 1
@@ -72,7 +72,7 @@ class Solver:
             # If base_from iz z0, break, otherwise determine new base_from and
             # base_to
             if base_from == 2 * m:
-                self.reporter.print_numpy("Base is:", np.transpose(base_str))
+                self.reporter.print_base(base_str)
                 break
             base_to = base_from + m if base_from < m else base_from - m
             ratios = [simplex_table[i, -1] / simplex_table[i, base_to]
@@ -86,7 +86,7 @@ class Solver:
                 base_from_index = base_z0_index
             else:
                 base_from = base[base_from_index]
-            self.reporter.print_numpy("Base is:", np.transpose(base_str))
+            self.reporter.print_base(base_str)
             self.reporter.print_changes(self.zw(base_from), self.zw(base_to))
 
         pt = np.zeros(2 * m, dtype=Fraction)

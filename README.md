@@ -11,6 +11,7 @@ we suggest to use `pip` to install following python packages
 * numpy
 * matplotlib
 * scipy
+* tabulate
 
 Also you need to install `python3-tk`
 
