@@ -1,17 +1,18 @@
 import numpy as np
 from fractions import Fraction
 
+
 class Solver:
+
     def __init__(self, z, p, reporter):
         self.z = z
         self.p = p
         self.zmp = np.array([zi - pj for zi in z for pj in p], dtype=Fraction)
         self.reporter = reporter
 
-
     def zw(self, j):
-        return "w_%d" % (j + 1) if j < self.m else ("z_%d" %
-                                              (j + 1 - self.m) if j != 2 * self.m else "z_0")
+        return "w_%d" % (j + 1) if j < self.m else
+        ("z_%d" % (j + 1 - self.m) if j != 2 * self.m else "z_0")
 
     def solve(self):
         E = np.eye(4, dtype=Fraction) - \
@@ -65,16 +66,18 @@ class Solver:
                 if i == base_from_index:
                     continue
                 else:
-                    simplex_table[i, :] -= simplex_table[base_from_index,
-                                                         :] * simplex_table[i, base_to]
+                    simplex_table[i, :] -= simplex_table[base_from_index, :] \
+                        * simplex_table[i, base_to]
             self.reporter.print_simplex_table(iter_no, simplex_table)
-            # If base_from iz z0, break, otherwise determine new base_from and base_to
+            # If base_from iz z0, break, otherwise determine new base_from and
+            # base_to
             if base_from == 2 * m:
                 self.reporter.print_numpy("Base is:", np.transpose(base_str))
                 break
             base_to = base_from + m if base_from < m else base_from - m
             ratios = [simplex_table[i, -1] / simplex_table[i, base_to]
-                      if simplex_table[i, base_to] > 0 else 10000 for i in range(m)]
+                      if simplex_table[i, base_to] > 0
+                      else 10000 for i in range(m)]
             # self.reporter.print_numpy("Ratios:", ratios)
             base_from_index = np.argmin(ratios)
             base_z0_index = np.where(base == 2 * m)[0][0]
@@ -96,6 +99,3 @@ class Solver:
 
     def plot(self, plotter):
         plotter.plot(self.z, self.p, self.zmp)
-
-if __name__ == '__main__':
-    main()
