@@ -1,3 +1,8 @@
 *.log
 ENV
 __pycache__
+
+*.aux
+*.pdf
+_*.tex
+*.png

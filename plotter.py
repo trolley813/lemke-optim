@@ -20,4 +20,4 @@ class Plotter:
 		plt.plot(zmp[:, 0], zmp[:, 1], 'ro')
 		for simplex in hull_zmp.simplices:
 		    plt.plot(zmp[simplex, 0], zmp[simplex, 1], 'r--')
-		plt.show()
+		plt.savefig('./tex/figure.png')
