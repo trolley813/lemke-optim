@@ -46,12 +46,12 @@ class Solver:
         simplex_table[:, m:2 * m] = -M
         simplex_table[:, -2] = -1
         simplex_table[:, -1] = np.transpose(q)
-        self.reporter.print_simplex_table(iter_no, simplex_table)
         base = np.arange(m)
         base_str = np.array([self.zw(j) for j in base])
         base_from_index = np.argmin(simplex_table[:, -1])
         base_from = base[base_from_index]
         base_to = 2 * m
+        self.reporter.print_simplex_table(iter_no, base_str, simplex_table)
         self.reporter.print_base(base_str)
         self.reporter.print_changes(self.zw(base_from), self.zw(base_to))
         while 1:
@@ -68,7 +68,7 @@ class Solver:
                 else:
                     simplex_table[i, :] -= simplex_table[base_from_index, :] \
                         * simplex_table[i, base_to]
-            self.reporter.print_simplex_table(iter_no, simplex_table)
+            self.reporter.print_simplex_table(iter_no, base_str, simplex_table)
             # If base_from iz z0, break, otherwise determine new base_from and
             # base_to
             if base_from == 2 * m:
