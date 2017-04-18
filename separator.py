@@ -3,10 +3,10 @@ import numpy.linalg as nplin
 import scipy.optimize as sciopt
 from fractions import Fraction
 
-if __name__ == '__main__':
+def separator(z, p):
     np.set_printoptions(precision=4)
-    z = np.array([[2, 6], [1, 7], [8, 5]])
-    p = np.array([[4, 3], [6, 4], [1, 0]])
+    # z = np.array([[2, 6], [1, 7], [8, 5]])
+    # p = np.array([[4, 3], [6, 4], [1, 0]])
     print("z =\n%s" % z)
     print("p =\n%s" % p)
     zmp = np.array([zi - pj for zi in z for pj in p])
@@ -33,8 +33,14 @@ if __name__ == '__main__':
     gamma_star = (gammaL + gammaM) / 2
     print("gamma* = %6.4f" % gamma_star)
 
-    def classifier(x): return 1 if (c @ x.T - gamma_star) >= 0 else 2
+    def classifier(x): return (1 if (c @ x.T - gamma_star) >= 0 else 2)
+    count_z = 0
+    count_p = 0
     for zi in z:
         print(zi, classifier(zi))
+        count_z += (classifier(zi) == 1)
+    print("L: %4.2f%%" % (count_z / len(z) * 100))
     for pj in p:
         print(pj, classifier(pj))
+        count_p += (classifier(pj) == 2)
+    print("M: %4.2f%%" % (count_p / len(p) * 100))
