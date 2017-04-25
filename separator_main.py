@@ -14,3 +14,8 @@ if __name__ == "__main__":
     p = np.array([[4, 3], [5, 7], [1, 0]])
     separator.separator(z, p)
     plotter.Plotter.plot(z, p, figurefile="./tex/psep.png")
+    
+    z = np.array([[2, 6], [6, 7], [8, 6]])
+    p = np.array([[4, 3], [5, 6], [1, 0]])
+    separator.separator(z, p)
+    plotter.Plotter.plot(z, p, figurefile="./tex/zero.png")

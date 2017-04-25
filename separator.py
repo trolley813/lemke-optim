@@ -10,7 +10,7 @@ def separator(z, p):
     print("z =\n%s" % z)
     print("p =\n%s" % p)
     zmp = np.array([zi - pj for zi in z for pj in p])
-    res = sciopt.minimize(lambda c: -np.min(zmp @ c.T), np.array([1, 0]),
+    res = sciopt.minimize(lambda c: -np.min(zmp @ c.T), np.array([0, 1]),
                           constraints=(
                               {"type": "eq", "fun": lambda c: nplin.norm(c) - 1}
                               )
