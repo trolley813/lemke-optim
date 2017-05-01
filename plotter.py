@@ -5,7 +5,7 @@ import matplotlib.ticker as ticker
 
 class Plotter:
     @staticmethod
-    def plot(z, p, zmp=None, figurefile='./tex/figure.png'):
+    def plot(z, p, zmp=None, normal=None, figurefile='./tex/figure.png'):
         if zmp is None:
             zmp = np.array([zi - pj for zi in z for pj in p])
         hull_z = ConvexHull(z)
@@ -23,6 +23,7 @@ class Plotter:
         plt.plot(zmp[:, 0], zmp[:, 1], 'ro')
         for simplex in hull_zmp.simplices:
             plt.plot(zmp[simplex, 0], zmp[simplex, 1], 'r--')
+        plt.plot((0, normal[0]), (0, normal[1]), 'bo--')
         a2.grid(True, ls="--")
         a1.grid(True, ls="--")
         a1.xaxis.set_major_locator(ticker.MultipleLocator(1))

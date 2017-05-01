@@ -95,7 +95,8 @@ class Solver:
         ss, scs = pt[m:m + e], pt[m + e:]
         fs = np.dot(ss, np.dot(E, np.transpose(ss)))
         ys = np.array([ss[i] - ss[i + 2] for i in range(2)])
+        self.normal = ys / fs
         self.reporter.print_results(pt, ss, scs, fs, ys)
 
     def plot(self, plotter):
-        plotter.plot(self.z, self.p, self.zmp)
+        plotter.plot(self.z, self.p, self.zmp, self.normal)
