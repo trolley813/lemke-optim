@@ -45,4 +45,4 @@ def separator(z, p):
         count_p += (classifier(pj) == 2)
     print("M: %4.2f%%" % (count_p / len(p) * 100))
 
-    return (c, t)
+    return (c, t, gammaL, gammaM, gamma_star)

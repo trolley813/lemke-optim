@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.linalg as nplin
 from fractions import Fraction
 
 
@@ -15,24 +16,24 @@ class Solver:
                 ("z_{%d}" % (j + 1 - self.m) if j != 2 * self.m else "z_0"))
 
     def solve(self):
-        E = np.eye(4, dtype=Fraction) - \
+        Q = np.eye(4, dtype=Fraction) - \
             (np.eye(4, dtype=Fraction, k=-2) + np.eye(4, dtype=Fraction, k=2))
-        self.reporter.print_numpy("E =", E)
-        e = np.size(E, 0)
+        self.reporter.print_numpy("Q =", Q)
+        e = np.size(Q, 0)
         z = self.z
         self.reporter.print_numpy("z =", z)
         p = self.p
         self.reporter.print_numpy("p =", p)
         zmp = self.zmp
-        self.reporter.print_numpy("zmp =", zmp)
+        self.reporter.print_numpy("z - p =", zmp)
         A = np.hstack((zmp, -zmp))
         self.reporter.print_numpy("A =", A)
         a = np.size(A, 0)
         b = np.ones((np.size(A, 0), 1), dtype=Fraction)
         self.reporter.print_numpy("b =0", b)
-        M = np.zeros((np.size(E, 0) + np.size(A, 0),
-                      np.size(E, 0) + np.size(A, 0)), dtype=Fraction)
-        M[0:e, 0:e] = E + np.transpose(E)
+        M = np.zeros((np.size(Q, 0) + np.size(A, 0),
+                      np.size(Q, 0) + np.size(A, 0)), dtype=Fraction)
+        M[0:e, 0:e] = Q + np.transpose(Q)
         M[0:e, e:a + e] = -np.transpose(A)
         M[e:a + e, 0:e] = A
         self.m = np.size(M, 0)
@@ -93,10 +94,15 @@ class Solver:
         for i in range(len(base)):
             pt[base[i]] = simplex_table[i, -1]
         ss, scs = pt[m:m + e], pt[m + e:]
-        fs = np.dot(ss, np.dot(E, np.transpose(ss)))
+        fs = np.dot(ss, np.dot(Q, np.transpose(ss)))
         ys = np.array([ss[i] - ss[i + 2] for i in range(2)])
         self.normal = ys / fs
-        self.reporter.print_results(pt, ss, scs, fs, ys)
+        c = ys / nplin.norm(ys * 1.0)
+        gammaL = np.min(z.dot(c.T))
+        gammaM = np.max(p.dot(c.T))
+        self.gammas = (gammaL, gammaM)
+        self.reporter.print_results(pt, ss, scs, fs, ys, self.gammas)
 
     def plot(self, plotter):
-        plotter.plot(self.z, self.p, self.zmp, self.normal)
+        plotter.plot(self.z, self.p, self.zmp, 
+                     normal=self.normal, gammas=self.gammas)
